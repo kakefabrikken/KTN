@@ -27,5 +27,6 @@ while True:
         #Fill in end 
         #Close client socket 
         #Fill in start 
-        #Fill in end 
+        #Fill in end
+        print 'Gah'
 serverSocket.close() 
