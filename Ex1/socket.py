@@ -8,12 +8,12 @@ print ('socket created')
 
 host = 'localhost' # maybe gethostbyname(gethostname())
 port = 80 # possibly uneccessary
-serverSocket.bind( (host, port) )
+serverSocket.bind( (host, 80) )
 
 serverSocket.listen(1) # argument is backlog, 0-5, specifying max number of queued connections
 
-awesome_msg = ("HTTP / 1.0 200 OK/ \r\n Content-Type: text/html\r\n\r\n")
-failuremsg = ("HTTP / 1.0 404 Not Found\r\n Content-Type: text/plain\r\n\r\n 404 File Not Found")
+awesome_msg = ("HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n")
+failuremsg = ("HTTP/1.0 404 Not Found\r\nContent-Type: text/plain\r\n\r\n 404 File Not Found")
 
 while True: 
     #Establish the connection 

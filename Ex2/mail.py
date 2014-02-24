@@ -1,72 +1,51 @@
 from socket import *
 
-client_msgs = []
-msg_index = 0
-def client_send(index):
-    clientSocket.send(client_msgs[index])
+def client_send(message):
+    clientSocket.send(message)
+    #print message
+
 def client_recv(flag):
     recv = clientSocket.recv(1024)
     print recv
-    if flag:
-        if recv[:3] != '250':
-            print '250 reply not received from server'
+    if flag != -1:
+        if recv[:3] != str(flag):
+            print str(flag) + ' reply not received from server'
 
-def client_send_and_recv(index, flag):
-    client_send(index)
+def  client_conn(msg,flag):
+    client_send(msg)
     client_recv(flag)
 
-def client_msgs_handler(msg, flag):
-    client_msgs.append(msg)
-    client_send_and_recv(msg_index)
-    msg_index += 1
-
-
-
 # Choose a mail server (e.g. Google mail server) and call it mailserver
-mailserver = 'localhost' # possibly something like smtp.stud.ntnu.no
+mailserver = 'smtp.stud.ntnu.no'
 
 # Create socket called clientSocket and establish a TCP connection with mailserver
 clientSocket = socket(AF_INET, SOCK_STREAM)
-mailport = 25 # 25 may be server side, so this could be wrong
+mailport = 25
 clientSocket.connect((mailserver, mailport))
 
-recv = clientSocket.recv(1024)
-print recv
-if recv[:3] != '220':
-	print '220 reply not received from server.'
+client_recv(220)
 
 # Send HELO command and print server response.
-#heloCommand = 'HELO Alice\r\n'
-client_msg_handler('HELO Alice\r\n',1)
-
-#client_msgs.append(heloCommand)
-#client_send_and_recv(msg_index)
-#msg_index += 1
-
-
-#clientSocket.send(heloCommand)
-#recv1 = clientSocket.recv(1024)
-#print recv1
-#if recv1[:3] != '250':
-#	print '250 reply not received from server.'
-
+client_conn('HELO Alice\r\n',250)
 
 # Send MAIL FROM command and print server response.
-client_msg_handler("MAIL FROM: <krinorm@stud.ntnu.no>\r\n",1)
-
+client_conn('MAIL FROM: Kristian\r\n', 250)
 
 # Send RCPT TO command and print server response.
-client_msg_handler("RCPT TO <krinorm@stud.ntnu.no>\r\n",1)
-
+client_conn('RCPT TO: <krinorm@stud.ntnu.no>\r\n', 250)
 
 # Send DATA command and print server response.
-client_msg_handler("DATA",0)
+client_conn('DATA\r\n', 354)
 
 # Send message data.
-client_msg_handler('\r\n I love computer networks!',0)
+client_send('From: "Kristian"\r\n')
+client_send('To: "Andreas"\r\n')
+client_send('Date: Now\r\n')
+client_send('Subject: test\r\n')
+client_send('\r\nI love computer networks!\r\n')
 
 # Message ends with a single period.
-client_msg_handler('\r\n.\r\n',0)
+client_conn('\r\n.\r\n', 250)
 
 # Send QUIT command and get server response.
-client_msg_handler("QUIT",0)
+client_conn('QUIT\r\n', 221)
