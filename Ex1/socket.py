@@ -6,7 +6,7 @@ except socket.error:
     sys.exit()
 print ('socket created')
 
-host = 'localhost' #gethostbyname(gethostname())
+host = 'localhost' # maybe gethostbyname(gethostname())
 port = 80 # possibly uneccessary
 serverSocket.bind( (host, port) )
 
@@ -29,9 +29,11 @@ while True:
         print (filename)
         f = open(filename[1:])
         outputdata = f.read() 
-        #Send one HTTP header line into socket
 
+        #Send one HTTP header line into socket
         conn.send(awesome_msg)
+
+        #send data
         for i in range(0, len(outputdata)):
             conn.send(outputdata[i]) 
         conn.close() 
