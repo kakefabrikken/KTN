@@ -2,7 +2,6 @@ from socket import *
 
 def client_send(message):
     clientSocket.send(message)
-    #print message
 
 def client_recv(flag):
     recv = clientSocket.recv(1024)
